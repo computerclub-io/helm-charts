@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-casc-config
+data:
+  jenkins.yaml: |
+    jenkins:
+{{- if .Values.GithHubOAuth.Enabled }}
+      securityRealm:
+        github:
+          githubWebUri: {{ .Values.GithHubOAuth.GitHubWebURI }}
+          githubApiUri: {{ .Values.GithHubOAuth.GitHubAPIURI }}
+          clientID: {{ .Values.GithHubOAuth.ClientID }}
+          clientSecret: {{ .Values.GithHubOAuth.ClientSecret }}
+          oauthScopes: "read:org,user:email"
+      authorizationStrategy:
+        github:
+          adminUserNames: { .Values.GithHubOAuth.AdminUsernames }}
+          organizationNames: ""
+          useRepositoryPermissions: true
+          authenticatedUserReadPermission: true
+          authenticatedUserCreateJobPermission: false
+          allowGithubWebHookPermission: false
+          allowCcTrayPermission: false
+          allowAnonymousReadPermission: false
+          allowAnonymousJobStatusPermission: false
+{{- end }}
+      clouds:
+      - kubernetes:
+          containerCapStr: "10"
+          credentialsId: "jenkins-serviceaccount"
+          jenkinsTunnel: "jenkins-agent:50000"
+          jenkinsUrl: "http://jenkins:8080"
+          maxRequestsPerHostStr: "32"
+          name: "kubernetes"
+          namespace: "ops"
+          serverUrl: "https://kubernetes.default"
+      systemMessage: "This jenkins is managed by JCasC"
