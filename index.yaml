@@ -19,6 +19,6 @@ entries:
     - https://github.com/jenkinsci/jenkins
     - https://github.com/jenkinsci/docker-jnlp-slave
     urls:
-    - jenkins-0.19.1.tgz
+    - https://github.com/computerclub-io/helm-charts/raw/master/jenkins-0.19.1.tgz
     version: 0.19.1
 generated: 2018-10-17T16:21:16.266002+01:00
